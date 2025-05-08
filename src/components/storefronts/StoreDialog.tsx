@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/dialog';
 
 // Import your new forms
-import { ShopifyForm } from './forms/ShopifyForm';
-import { WooCommerceForm } from './forms/WooCommerceForm';
-import { DarazForm } from './forms/DarazForm';
+import { ShopifyForm } from '../forms/ShopifyForm';
+import { WooCommerceForm } from '../forms/WooCommerceForm';
+import { DarazForm } from '../forms/DarazForm';
 
 const STORE_TYPES = {
   SHOPIFY: 'shopify',

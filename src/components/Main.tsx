@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Your custom components
-import { WarehouseDialog } from './WarehouseDialog';
-import { WarehouseTabContent } from './WarehouseTabContent';
-import { StoreDialog } from './StoreDialog'; // Import StoreDialog
-import { StoreTabContent } from './StoreTabContent';
-import Pool from './Pool';
+import { WarehouseDialog } from './warehouses/WarehouseDialog';
+import { WarehouseTabContent } from './warehouses/WarehouseTabContent';
+import { StoreDialog } from './storefronts/StoreDialog'; // Import StoreDialog
+import { StoreTabContent } from './storefronts/StoreTabContent';
+import Pool from './flow/Pool';
 
 
 // Dummy data
