@@ -16,7 +16,7 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
           onClick={onAdd} // This will now trigger the multi-step dialog
           variant="outline" // variant="outline" might be overridden by explicit bg
           size="sm"
-          className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-3 py-1.5"
+          className="bg-neutral-800 hover:bg-neutral-700 text-white border-neutral-700 text-xs px-3 py-1.5"
         >
           Add store +
         </Button>
@@ -24,12 +24,12 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
 
       <div className="space-y-2">
         {stores.length === 0 && (
-          <p className="text-gray-400 text-center py-4">No stores yet. Add one!</p>
+          <p className="text-neutral-400 text-center py-4">No stores yet. Add one!</p>
         )}
         {stores.map((store) => (
           <div
             key={store.id}
-            className="flex justify-between items-center p-3 border border-gray-600 rounded-md bg-gray-700"
+            className="flex justify-between items-center p-3 border border-neutral-600 rounded-md bg-neutral-700"
           >
             <div>
               <span className="text-white text-base">{store.name}</span>
@@ -41,7 +41,7 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
               )}
               {/* You might want to display other specific fields based on type here, or in a details view */}
               {store.location && !store.type && ( // Fallback for old data without type
-                <span className="text-gray-400 text-xs ml-1">
+                <span className="text-neutral-400 text-xs ml-1">
                   ({store.location})
                 </span>
               )}
@@ -50,7 +50,7 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
               onClick={() => onEdit(store)} // onEdit will pass the store with its type
               variant="outline" // variant="outline" might be overridden by explicit bg
               size="sm"
-              className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-4 py-1"
+              className="bg-neutral-800 hover:bg-neutral-700 text-white border-neutral-700 text-xs px-4 py-1"
             >
               edit
             </Button>

@@ -35,51 +35,51 @@ export function WooCommerceForm({ initialData = {}, onSave, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="wooStoreName" className="text-gray-300">Store Name <span className="text-red-500">*</span></Label>
+        <Label htmlFor="wooStoreName" className="text-neutral-300">Store Name <span className="text-red-500">*</span></Label>
         <Input
           id="wooStoreName"
           value={storeName}
           onChange={(e) => setStoreName(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           placeholder="My WooCommerce Shop"
           required
         />
       </div>
       <div>
-        <Label htmlFor="wooConsumerKey" className="text-gray-300">Consumer Key <span className="text-red-500">*</span></Label>
+        <Label htmlFor="wooConsumerKey" className="text-neutral-300">Consumer Key <span className="text-red-500">*</span></Label>
         <Input
           id="wooConsumerKey"
           value={consumerKey}
           onChange={(e) => setConsumerKey(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           required
         />
       </div>
       <div>
-        <Label htmlFor="wooConsumerSecret" className="text-gray-300">Consumer Secret <span className="text-red-500">*</span></Label>
+        <Label htmlFor="wooConsumerSecret" className="text-neutral-300">Consumer Secret <span className="text-red-500">*</span></Label>
         <Input
           id="wooConsumerSecret"
           value={consumerSecret}
           onChange={(e) => setConsumerSecret(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           required
         />
       </div>
        <div>
-        <Label htmlFor="wooSiteUrl" className="text-gray-300">Site URL <span className="text-red-500">*</span></Label>
+        <Label htmlFor="wooSiteUrl" className="text-neutral-300">Site URL <span className="text-red-500">*</span></Label>
         <Input
           id="wooSiteUrl"
           type="url"
           value={siteUrl}
           onChange={(e) => setSiteUrl(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           placeholder="https://my-site.com"
           required
         />
       </div>
       <div className="flex justify-end space-x-2 pt-2">
         <Button type="button" variant="outline" onClick={onCancel}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+          className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
         >
           Cancel
         </Button>

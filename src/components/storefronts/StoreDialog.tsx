@@ -62,7 +62,7 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
 
   const renderPlatformSelection = () => (
     <div className="py-4">
-      <DialogDescription className="text-center mb-6 text-gray-400">
+      <DialogDescription className="text-center mb-6 text-neutral-400">
         Select the type of store you want to add.
       </DialogDescription>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -74,10 +74,10 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
           <Button
             key={platform.type}
             variant="outline"
-            className="flex flex-col items-center justify-center h-32 p-4 border-gray-600 hover:bg-gray-700 text-white bg-gray-750" // Adjusted styling
+            className="flex flex-col items-center justify-center h-32 p-4 border-neutral-600 hover:bg-neutral-700 text-white bg-neutral-750" // Adjusted styling
             onClick={() => handleTypeSelect(platform.type)}
           >
-            <span className="text-xs text-gray-400 mb-2">logo here</span> {/* Placeholder for actual logo */}
+            <span className="text-xs text-neutral-400 mb-2">logo here</span> {/* Placeholder for actual logo */}
             <span className="text-sm font-semibold">{platform.label}</span>
           </Button>
         ))}
@@ -112,7 +112,7 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
         }
         onOpenChange(isOpen);
     }}>
-      <DialogContent className="sm:max-w-md md:max-w-lg bg-gray-800 border-gray-700 text-white">
+      <DialogContent className="sm:max-w-md md:max-w-lg bg-neutral-800 border-neutral-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-white">
             {mode === 'edit' ? `Edit ${selectedType ? selectedType.charAt(0).toUpperCase() + selectedType.slice(1) : ''} Store` : 'Add New Store'}

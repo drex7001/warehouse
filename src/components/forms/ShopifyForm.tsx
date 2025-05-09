@@ -32,42 +32,42 @@ export function ShopifyForm({ initialData = {}, onSave, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="shopifyStoreName" className="text-gray-300">Store Name <span className="text-red-500">*</span></Label>
+        <Label htmlFor="shopifyStoreName" className="text-neutral-300">Store Name <span className="text-red-500">*</span></Label>
         <Input
           id="shopifyStoreName"
           value={storeName}
           onChange={(e) => setStoreName(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           placeholder="My Shopify Store"
           required
         />
       </div>
       <div>
-        <Label htmlFor="shopifyApiKey" className="text-gray-300">API Key <span className="text-red-500">*</span></Label>
+        <Label htmlFor="shopifyApiKey" className="text-neutral-300">API Key <span className="text-red-500">*</span></Label>
         <Input
           id="shopifyApiKey"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           placeholder="shpat_xxxxxxxxxxxx"
           required
         />
       </div>
       <div>
-        <Label htmlFor="shopifyStoreUrl" className="text-gray-300">Store URL <span className="text-red-500">*</span></Label>
+        <Label htmlFor="shopifyStoreUrl" className="text-neutral-300">Store URL <span className="text-red-500">*</span></Label>
         <Input
           id="shopifyStoreUrl"
           type="url"
           value={storeUrl}
           onChange={(e) => setStoreUrl(e.target.value)}
-          className="mt-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500"
+          className="mt-1 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500"
           placeholder="https://my-store.myshopify.com"
           required
         />
       </div>
       <div className="flex justify-end space-x-2 pt-2">
         <Button type="button" variant="outline" onClick={onCancel}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+          className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
         >
           Cancel
         </Button>

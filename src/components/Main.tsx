@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // shadcn/ui components
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -12,8 +12,8 @@ import Pool from './flow/Pool';
 
 // Dummy data
 const initialWarehouses = [
-  { id: 'w1', name: 'Warehouse A', details: '(Default)' },
-  { id: 'w2', name: 'Warehouse B', details: '(* if this has city list)' },
+  { id: 'w1', name: 'Warehouse A', details: 'Serves New York, Boston', isDefault: true },
+  { id: 'w2', name: 'Warehouse B', details: 'Serves Chicago, Detroit', isDefault: false },
 ];
 const initialStores = [
   { id: 's1', name: 'My Shopify Store', type: 'shopify', apiKey: 'shpat_123', storeUrl: 'https://s1.myshopify.com' },
@@ -31,7 +31,7 @@ const transformWarehouseToNode = (warehouse, index) => ({
   data: {
     label: warehouse.name,
     type: 'warehouse', // Type for CustomNode logic
-    isDefault: !!warehouse.isDefault,
+    isDefault: !!warehouse.isDefault, // Ensure this is correctly derived
     cities: warehouse.details || '', // Or however you store city list
     // ... any other data your CustomNode needs from the warehouse object
   },
@@ -52,6 +52,7 @@ const transformStoreToNode = (store, index) => ({
 
 const generateFlowEdges = (appWarehouses, appStores) => {
   const edges = [];
+  // Ensure appWarehouses have the isDefault property correctly set
   const defaultWarehouses = appWarehouses.filter(wh => wh.isDefault);
 
   defaultWarehouses.forEach(warehouse => {
@@ -81,6 +82,17 @@ function Main() {
   const [storeDialogMode, setStoreDialogMode] = useState('add');
   const [currentEditingStore, setCurrentEditingStore] = useState(null);
 
+  // Flow State
+  const [flowNodes, setFlowNodes] = useState([]);
+  const [flowEdges, setFlowEdges] = useState([]);
+
+  useEffect(() => {
+    const transformedWarehouses = warehouses.map((wh, index) => transformWarehouseToNode(wh, index));
+    const transformedStores = stores.map((st, index) => transformStoreToNode(st, index));
+    setFlowNodes([...transformedWarehouses, ...transformedStores]);
+    setFlowEdges(generateFlowEdges(warehouses, stores));
+  }, [warehouses, stores]);
+
 
   // Warehouse Dialog Handlers
   const openAddWarehouseDialog = () => {
@@ -97,7 +109,9 @@ function Main() {
 
   const handleWarehouseDialogSubmit = (formData) => {
     if (warehouseDialogMode === 'add') {
-      const newWarehouse = { ...formData, id: `w${Date.now()}` };
+      // Assuming isDefault might come from formData or defaults to false
+      // For now, new warehouses are not set as default unless formData includes `isDefault: true`
+      const newWarehouse = { ...formData, id: `w${Date.now()}`, isDefault: formData.isDefault || false };
       setWarehouses([...warehouses, newWarehouse]);
     } else if (warehouseDialogMode === 'edit' && formData.id) {
       setWarehouses(
@@ -133,19 +147,19 @@ function Main() {
   };
 
   return (
-    <div className="bg-gray-900 text-white p-4 font-sans rounded-2xl">
-      <div className="w-full">
+    <div className="bg-neutral-900 text-white p-4 font-sans rounded-2xl">
+      <div className="flex gap-4 w-full item-start">
         <Tabs defaultValue="warehouse" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800 border-gray-700 p-1">
+          <TabsList className="grid w-full grid-cols-2 bg-neutral-800 border-neutral-700 p-1">
             <TabsTrigger
               value="warehouse"
-              className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-white text-neutral-400"
             >
               Warehouse
             </TabsTrigger>
             <TabsTrigger
               value="store"
-              className="data-[state=active]:bg-gray-700 data-[state=active]:text-white text-gray-400"
+              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-white text-neutral-400"
             >
               Store
             </TabsTrigger>
@@ -153,7 +167,7 @@ function Main() {
 
           <TabsContent
             value="warehouse"
-            className="mt-0 p-5 border border-t-0 border-gray-600 rounded-b-md bg-gray-700"
+            className="mt-0 p-5 border border-t-0 border-neutral-600 rounded-b-md bg-neutral-700"
           >
             <WarehouseTabContent
               warehouses={warehouses}
@@ -164,7 +178,7 @@ function Main() {
 
           <TabsContent
             value="store"
-            className="mt-0 p-5 border border-t-0 border-gray-600 rounded-b-md bg-gray-700"
+            className="mt-0 p-5 border border-t-0 border-neutral-600 rounded-b-md bg-neutral-700"
           >
             <StoreTabContent
               stores={stores}
@@ -173,6 +187,10 @@ function Main() {
             />
           </TabsContent>
         </Tabs>
+        {/* React Flow Pool */}
+        <div className="mt-6" style={{ height: '600px', width: '100%', border: '1px solid #4B5563', borderRadius: '0.375rem' }}>
+          <Pool nodes={flowNodes} edges={flowEdges} />
+        </div>
       </div>
 
       {/* Dialogs */}
@@ -190,6 +208,8 @@ function Main() {
         mode={storeDialogMode}
         initialData={currentEditingStore}
       />
+
+
     </div>
   );
 }

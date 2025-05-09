@@ -48,13 +48,13 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] bg-gray-800 border-gray-700 text-white">
+      <DialogContent className="sm:max-w-[425px] bg-neutral-800 border-neutral-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-white">
             {mode === 'edit' ? 'Edit Warehouse' : 'Add New Warehouse'}
           </DialogTitle>
           {mode === 'add' && (
-            <DialogDescription className="text-gray-400">
+            <DialogDescription className="text-neutral-400">
               Enter the details for the new warehouse.
             </DialogDescription>
           )}
@@ -62,34 +62,34 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right text-gray-300">
+              <Label htmlFor="name" className="text-right text-neutral-300">
                 Name <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="col-span-3 bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:border-blue-500"
+                className="col-span-3 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500 focus:border-blue-500"
                 placeholder="e.g., Main Warehouse"
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="details" className="text-right text-gray-300">
+              <Label htmlFor="details" className="text-right text-neutral-300">
                 Details
               </Label>
               <Input
                 id="details"
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className="col-span-3 bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:border-blue-500"
+                className="col-span-3 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500 focus:border-blue-500"
                 placeholder="(Optional)"
               />
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
             >
               Cancel
             </Button>

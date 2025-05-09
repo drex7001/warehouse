@@ -7,18 +7,14 @@ import Main from "./components/Main";
 
 // Example Page Components
 const DashboardOverviewPage = () => <div>
-  <div className="text-xl font-bold dark:text-gray-100">Pools Overview</div>
-  <div className="bg-gray-100 dark:bg-gray-900"> {/* Applied dark background for this section */}
+  <div className="text-xl font-bold dark:text-neutral-100">Pools Overview</div>
+  <div className="bg-neutral-100 dark:bg-neutral-900"> {/* Applied dark background for this section */}
        <main>
          {/* Added light mode border for consistency, dark mode styles were already present */}
-         <div className="mx-auto py-6 sm:px-6 lg:px-8 rounded border-4 border-gray-300 dark:bg-gray-950 dark:border-gray-700 ">
+         <div className="mx-auto py-6 sm:px-6 lg:px-8 rounded border-1 border-neutral-300  dark:border-neutral-700 ">
            <div className="flex px-4 sm:px-0 gap-4">
              <div className="w-full">
                <Main />
-             </div>
-             {/* Updated border for dark mode to match React Flow's typical dark theme aesthetics */}
-             <div className="w-full border-4 border-dashed border-gray-200 dark:border-gray-600 rounded-lg h-96">
-               <Pool />
              </div>
            </div>
          </div>
