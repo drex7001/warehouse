@@ -8,7 +8,16 @@ import { WarehouseTabContent } from './warehouses/WarehouseTabContent';
 import { StoreDialog } from './storefronts/StoreDialog'; // Import StoreDialog
 import { StoreTabContent } from './storefronts/StoreTabContent';
 import PoolDiagram from './flow/PoolDiagram';
+import { Button } from '@/components/ui/button'; // Ensure Button component is imported
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'; // Ensure Dialog components are imported
 
 // Dummy data
 const initialWarehouses = [
@@ -86,6 +95,10 @@ function Pool() {
   const [flowNodes, setFlowNodes] = useState([]);
   const [flowEdges, setFlowEdges] = useState([]);
 
+  // Edit mode for PoolDiagram
+  const [isPoolEditable, setIsPoolEditable] = useState(false);
+  const [isConfirmSaveDialogOpen, setIsConfirmSaveDialogOpen] = useState(false);
+
   useEffect(() => {
     const transformedWarehouses = warehouses.map((wh, index) => transformWarehouseToNode(wh, index));
     const transformedStores = stores.map((st, index) => transformStoreToNode(st, index));
@@ -146,6 +159,28 @@ function Pool() {
     // StoreDialog will call onOpenChange(false) internally now
   };
 
+  // Pool Diagram Edit Handlers
+  const handleModifyPoolClick = () => {
+    setIsPoolEditable(true);
+  };
+
+  const handleSaveChangesPoolClick = () => {
+    setIsConfirmSaveDialogOpen(true);
+  };
+
+  const handleConfirmSavePool = () => {
+    // Placeholder for actual save logic (e.g., API call)
+    console.log('Saving pool changes:', { flowNodes, flowEdges });
+    setIsConfirmSaveDialogOpen(false);
+    setIsPoolEditable(false); // Disable editing mode after saving
+    // Potentially refetch or update data here
+  };
+
+  const handleCancelSavePool = () => {
+    setIsConfirmSaveDialogOpen(false);
+  };
+
+
   return (
     <div className="bg-neutral-900 text-white p-4 font-sans rounded-2xl">
       <div className="flex gap-8 w-full item-start">
@@ -189,8 +224,26 @@ function Pool() {
         </Tabs>
 
         <div className="" style={{ height: '600px', width: '100%', border: '1px solid #4B5563', borderRadius: '0.375rem' }}>
-          <PoolDiagram nodes={flowNodes} edges={flowEdges} />
+          <PoolDiagram nodes={flowNodes} edges={flowEdges} isEditable={isPoolEditable} />
         </div>
+      </div>
+
+      <div className="flex justify-end mt-6 space-x-3">
+        <Button
+          onClick={handleModifyPoolClick}
+          disabled={isPoolEditable}
+          variant="outline"
+          className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
+        >
+          Modify Diagram
+        </Button>
+        <Button
+          onClick={handleSaveChangesPoolClick}
+          disabled={!isPoolEditable}
+          className="bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          Save Changes
+        </Button>
       </div>
 
       {/* Dialogs */}
@@ -208,6 +261,35 @@ function Pool() {
         mode={storeDialogMode}
         initialData={currentEditingStore}
       />
+
+      {/* Confirmation Dialog for Saving Pool Changes */}
+      <Dialog open={isConfirmSaveDialogOpen} onOpenChange={setIsConfirmSaveDialogOpen}>
+        <DialogContent className="sm:max-w-md bg-neutral-800 border-neutral-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-white">Confirm Save Changes</DialogTitle>
+            <DialogDescription className="text-neutral-400 pt-2">
+              Are you sure you want to save the changes made to the pool diagram?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-end pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancelSavePool}
+              className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleConfirmSavePool}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Confirm Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
 
     </div>

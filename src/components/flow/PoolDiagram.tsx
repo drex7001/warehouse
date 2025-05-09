@@ -36,7 +36,7 @@ const defaultEdgeOptions = {
   },
 };
 
-export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromProps }) {
+export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromProps, isEditable }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesFromProps || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesFromProps || []);
 
@@ -68,8 +68,15 @@ export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromPro
       defaultEdgeOptions={defaultEdgeOptions}
       connectionLineComponent={CustomConnectionLine}
       connectionLineStyle={connectionLineStyle}
+      nodesDraggable={isEditable}
+      nodesConnectable={isEditable}
+      elementsSelectable={isEditable} // Controls if nodes and edges can be selected
+      panOnDrag={!isEditable} // Example: disable panning when editable, or keep it enabled
+      zoomOnScroll={!isEditable} // Example: disable zoom when editable
+      zoomOnDoubleClick={!isEditable} // Example: disable zoom on double click when editable
+      // Consider if controls should be hidden or disabled when not editable
     >
-       <Controls />
+       <Controls style={{ display: isEditable ? 'flex' : 'none' }} /> {/* Optionally hide controls */}
        <Background />
     </ReactFlow>
   );
