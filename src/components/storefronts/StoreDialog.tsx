@@ -1,4 +1,3 @@
-// src/components/StoreDialog.js
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-// Import your new forms
+// Import forms
 import { ShopifyForm } from '../forms/ShopifyForm';
 import { WooCommerceForm } from '../forms/WooCommerceForm';
 import { DarazForm } from '../forms/DarazForm';

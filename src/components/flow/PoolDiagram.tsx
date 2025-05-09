@@ -36,7 +36,7 @@ const defaultEdgeOptions = {
   },
 };
 
-export default function Pool({ nodes: nodesFromProps, edges: edgesFromProps }) {
+export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromProps }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesFromProps || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesFromProps || []);
 

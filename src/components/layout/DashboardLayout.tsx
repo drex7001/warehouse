@@ -1,15 +1,17 @@
-// src/components/layout/DashboardLayout.jsx
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'; // Adjust path
-import { Button } from '@/components/ui/button'; // Adjust path
-import { Menu, Home, Settings, Package } from 'lucide-react'; // Icons
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'; 
+import { Button } from '@/components/ui/button';
+import { Menu, Home, Settings, Package, Layers } from 'lucide-react'; // Added Layers icon
 import DarkModeSwitch from "../DarkModeSwitch";
 
 const SidebarContent = () => (
   <nav className="flex flex-col gap-2 p-4">
     <Button variant="ghost" className="justify-start" asChild>
       <Link to="/dashboard"><Home className="mr-2 h-4 w-4" /> Dashboard</Link>
+    </Button>
+    <Button variant="ghost" className="justify-start" asChild>
+      <Link to="/dashboard/pools"><Layers className="mr-2 h-4 w-4" /> Pools</Link>
     </Button>
     <Button variant="ghost" className="justify-start" asChild>
       <Link to="/dashboard/products"><Package className="mr-2 h-4 w-4" /> Products</Link>

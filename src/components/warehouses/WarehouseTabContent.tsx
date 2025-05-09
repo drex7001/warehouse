@@ -1,6 +1,5 @@
-// src/components/WarehouseTabContent.js (or your preferred path)
 import React from 'react';
-import { Button } from '@/components/ui/button'; // Adjust path
+import { Button } from '@/components/ui/button';
 
 export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
   return (

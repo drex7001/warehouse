@@ -1,6 +1,5 @@
-// src/components/WarehouseDialog.js (or your preferred path)
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button'; // Adjust path if needed
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,

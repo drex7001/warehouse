@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 // shadcn/ui components
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Your custom components
+// custom components
 import { WarehouseDialog } from './warehouses/WarehouseDialog';
 import { WarehouseTabContent } from './warehouses/WarehouseTabContent';
 import { StoreDialog } from './storefronts/StoreDialog'; // Import StoreDialog
 import { StoreTabContent } from './storefronts/StoreTabContent';
-import Pool from './flow/Pool';
+import PoolDiagram from './flow/PoolDiagram';
 
 
 // Dummy data
@@ -27,25 +27,25 @@ const NODE_Y_SPACING = 150;
 
 const transformWarehouseToNode = (warehouse, index) => ({
   id: `warehouse-${warehouse.id}`, // Ensure unique ID prefix for flow
-  type: 'custom', // As per your Pool.js
+  type: 'custom', // As per Pool.js
   data: {
     label: warehouse.name,
     type: 'warehouse', // Type for CustomNode logic
     isDefault: !!warehouse.isDefault, // Ensure this is correctly derived
     cities: warehouse.details || '', // Or however you store city list
-    // ... any other data your CustomNode needs from the warehouse object
+    // ... any other data CustomNode needs from the warehouse object
   },
   position: { x: WAREHOUSE_NODE_X, y: 100 + index * NODE_Y_SPACING },
 });
 
 const transformStoreToNode = (store, index) => ({
   id: `store-${store.id}`, // Ensure unique ID prefix for flow
-  type: 'custom', // As per your Pool.js
+  type: 'custom', // As per Pool.js
   data: {
     label: store.name,
     type: 'storefront', // Type for CustomNode logic
     platform: store.type, // e.g., 'shopify', 'woocommerce' - for CustomNode styling/info
-    // ... any other data your CustomNode needs from the store object
+    // ... any other data CustomNode needs from the store object
   },
   position: { x: STORE_NODE_X, y: 50 + index * NODE_Y_SPACING },
 });
@@ -61,7 +61,7 @@ const generateFlowEdges = (appWarehouses, appStores) => {
         id: `edge-${warehouse.id}-${store.id}`,
         source: `warehouse-${warehouse.id}`, // Match transformed node ID
         target: `store-${store.id}`,       // Match transformed node ID
-        type: 'floating', // As per your Pool.js
+        type: 'floating', // As per Pool.js
         // animated: true, // Optional
       });
     });
@@ -69,7 +69,7 @@ const generateFlowEdges = (appWarehouses, appStores) => {
   return edges;
 };
 
-function Main() {
+function Pool() {
   // Warehouse State
   const [warehouses, setWarehouses] = useState(initialWarehouses);
   const [isWarehouseDialogOpen, setIsWarehouseDialogOpen] = useState(false);
@@ -148,8 +148,8 @@ function Main() {
 
   return (
     <div className="bg-neutral-900 text-white p-4 font-sans rounded-2xl">
-      <div className="flex gap-4 w-full item-start">
-        <Tabs defaultValue="warehouse" className="w-full">
+      <div className="flex gap-8 w-full item-start">
+        <Tabs defaultValue="warehouse" className="w-1/2">
           <TabsList className="grid w-full grid-cols-2 bg-neutral-800 border-neutral-700 p-1">
             <TabsTrigger
               value="warehouse"
@@ -187,9 +187,9 @@ function Main() {
             />
           </TabsContent>
         </Tabs>
-        {/* React Flow Pool */}
-        <div className="mt-6" style={{ height: '600px', width: '100%', border: '1px solid #4B5563', borderRadius: '0.375rem' }}>
-          <Pool nodes={flowNodes} edges={flowEdges} />
+
+        <div className="" style={{ height: '600px', width: '100%', border: '1px solid #4B5563', borderRadius: '0.375rem' }}>
+          <PoolDiagram nodes={flowNodes} edges={flowEdges} />
         </div>
       </div>
 
@@ -214,4 +214,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Pool;

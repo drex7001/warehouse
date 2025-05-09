@@ -1,4 +1,3 @@
-// src/components/forms/ShopifyForm.js
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,8 +10,8 @@ export function ShopifyForm({ initialData = {}, onSave, onCancel }) {
 
   useEffect(() => {
     setStoreName(initialData.name || '');
-    setApiKey(initialData.apiKey || ''); // Assuming 'apiKey' is a field for Shopify
-    setStoreUrl(initialData.storeUrl || ''); // Assuming 'storeUrl' is a field for Shopify
+    setApiKey(initialData.apiKey || ''); 
+    setStoreUrl(initialData.storeUrl || '');
   }, [initialData]);
 
   const handleSubmit = (e) => {
