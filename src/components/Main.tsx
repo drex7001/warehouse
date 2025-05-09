@@ -133,7 +133,7 @@ function Main() {
   };
 
   return (
-    <div className="bg-gray-900 text-white p-4 font-sans">
+    <div className="bg-gray-900 text-white p-4 font-sans rounded-2xl">
       <div className="w-full">
         <Tabs defaultValue="warehouse" className="w-full">
           <TabsList className="grid w-full grid-cols-2 bg-gray-800 border-gray-700 p-1">

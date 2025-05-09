@@ -136,6 +136,7 @@ export default function Pool() {
 
   return (
     <ReactFlow
+    colorMode="dark"
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
@@ -149,7 +150,8 @@ export default function Pool() {
       connectionLineComponent={CustomConnectionLine}
       connectionLineStyle={connectionLineStyle}
     >
-      <Background />
+       <Controls />
+       <Background />
     </ReactFlow>
   );
 }

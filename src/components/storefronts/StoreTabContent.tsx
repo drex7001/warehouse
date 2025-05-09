@@ -14,9 +14,9 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
       <div className="flex justify-end mb-4">
         <Button
           onClick={onAdd} // This will now trigger the multi-step dialog
-          variant="outline"
+          variant="outline" // variant="outline" might be overridden by explicit bg
           size="sm"
-          className="bg-gray-600 hover:bg-gray-500 text-white border-gray-600 text-xs px-3 py-1.5"
+          className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-3 py-1.5"
         >
           Add store +
         </Button>
@@ -29,7 +29,7 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
         {stores.map((store) => (
           <div
             key={store.id}
-            className="flex justify-between items-center p-3 border border-gray-500 rounded-md bg-gray-700"
+            className="flex justify-between items-center p-3 border border-gray-600 rounded-md bg-gray-700"
           >
             <div>
               <span className="text-white text-base">{store.name}</span>
@@ -48,9 +48,9 @@ export function StoreTabContent({ stores, onAdd, onEdit }) {
             </div>
             <Button
               onClick={() => onEdit(store)} // onEdit will pass the store with its type
-              variant="outline"
+              variant="outline" // variant="outline" might be overridden by explicit bg
               size="sm"
-              className="bg-gray-600 hover:bg-gray-500 text-white border-gray-600 text-xs px-4 py-1"
+              className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-4 py-1"
             >
               edit
             </Button>

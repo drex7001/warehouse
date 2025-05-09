@@ -8,9 +8,9 @@ export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
       <div className="flex justify-end mb-4">
         <Button
           onClick={onAdd}
-          variant="outline"
+          variant="outline" // variant="outline" might be overridden by explicit bg, consider removing if not intended as outline
           size="sm"
-          className="bg-gray-600 hover:bg-gray-500 text-white border-gray-600 text-xs px-3 py-1.5"
+          className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-3 py-1.5"
         >
           Add warehouse +
         </Button>
@@ -23,7 +23,7 @@ export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
         {warehouses.map((wh) => (
           <div
             key={wh.id}
-            className="flex justify-between items-center p-3 border border-gray-500 rounded-md bg-gray-700" // Or bg-gray-750 if you want a slight difference
+            className="flex justify-between items-center p-3 border border-gray-600 rounded-md bg-gray-700"
           >
             <div>
               <span className="text-white text-base">{wh.name}</span>
@@ -35,9 +35,9 @@ export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
             </div>
             <Button
               onClick={() => onEdit(wh)}
-              variant="outline"
+              variant="outline" // variant="outline" might be overridden by explicit bg
               size="sm"
-              className="bg-gray-600 hover:bg-gray-500 text-white border-gray-600 text-xs px-4 py-1"
+              className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700 text-xs px-4 py-1"
             >
               edit
             </Button>

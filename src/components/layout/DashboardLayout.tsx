@@ -4,6 +4,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'; // Adjust path
 import { Button } from '@/components/ui/button'; // Adjust path
 import { Menu, Home, Settings, Package } from 'lucide-react'; // Icons
+import DarkModeSwitch from "../DarkModeSwitch";
 
 const SidebarContent = () => (
   <nav className="flex flex-col gap-2 p-4">
@@ -23,7 +24,7 @@ const DashboardLayout = () => {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       {/* Sidebar - Visible on larger screens */}
-      <div className="hidden border-r bg-muted/40 md:block">
+      <div className="hidden border-r  md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link to="/dashboard" className="flex items-center gap-2 font-semibold">
@@ -40,7 +41,7 @@ const DashboardLayout = () => {
       {/* Main Content Area */}
       <div className="flex flex-col">
         {/* Header for Mobile + Main Header Content */}
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <header className="flex h-14 items-center gap-4 border-b  px-4 lg:h-[60px] lg:px-6">
           {/* Mobile Sidebar Toggle using Sheet */}
           <Sheet>
             <SheetTrigger asChild>
@@ -66,6 +67,7 @@ const DashboardLayout = () => {
           <div className="w-full flex-1">
             {/* <SearchInput /> */}
           </div>
+          <DarkModeSwitch />
           {/* <UserDropdown /> */}
         </header>
 
