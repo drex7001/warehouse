@@ -7,7 +7,7 @@ import { WarehouseDialog } from './warehouses/WarehouseDialog';
 import { WarehouseTabContent } from './warehouses/WarehouseTabContent';
 import { StoreDialog } from './storefronts/StoreDialog'; // Import StoreDialog
 import { StoreTabContent } from './storefronts/StoreTabContent';
-import PoolDiagram from './flow/PoolDiagram';
+import PoolDiagram from './diagram/PoolDiagram';
 import { Button } from '@/components/ui/button'; // Ensure Button component is imported
 
 import {
@@ -35,7 +35,7 @@ const STORE_NODE_X = 500;
 const NODE_Y_SPACING = 150;
 
 const transformWarehouseToNode = (warehouse, index) => ({
-  id: `warehouse-${warehouse.id}`, // Ensure unique ID prefix for flow
+  id: `warehouse-${warehouse.id}`, // Ensure unique ID prefix for diagram
   type: 'custom', // As per Pool.js
   data: {
     label: warehouse.name,
@@ -48,7 +48,7 @@ const transformWarehouseToNode = (warehouse, index) => ({
 });
 
 const transformStoreToNode = (store, index) => ({
-  id: `store-${store.id}`, // Ensure unique ID prefix for flow
+  id: `store-${store.id}`, // Ensure unique ID prefix for diagram
   type: 'custom', // As per Pool.js
   data: {
     label: store.name,
@@ -59,7 +59,7 @@ const transformStoreToNode = (store, index) => ({
   position: { x: STORE_NODE_X, y: 50 + index * NODE_Y_SPACING },
 });
 
-const generateFlowEdges = (appWarehouses, appStores) => {
+const generatediagramEdges = (appWarehouses, appStores) => {
   const edges = [];
   // Ensure appWarehouses have the isDefault property correctly set
   const defaultWarehouses = appWarehouses.filter(wh => wh.isDefault);
@@ -91,9 +91,9 @@ function Pool() {
   const [storeDialogMode, setStoreDialogMode] = useState('add');
   const [currentEditingStore, setCurrentEditingStore] = useState(null);
 
-  // Flow State
-  const [flowNodes, setFlowNodes] = useState([]);
-  const [flowEdges, setFlowEdges] = useState([]);
+  // diagram State
+  const [diagramNodes, setdiagramNodes] = useState([]);
+  const [diagramEdges, setdiagramEdges] = useState([]);
 
   // Edit mode for PoolDiagram
   const [isPoolEditable, setIsPoolEditable] = useState(false);
@@ -102,8 +102,8 @@ function Pool() {
   useEffect(() => {
     const transformedWarehouses = warehouses.map((wh, index) => transformWarehouseToNode(wh, index));
     const transformedStores = stores.map((st, index) => transformStoreToNode(st, index));
-    setFlowNodes([...transformedWarehouses, ...transformedStores]);
-    setFlowEdges(generateFlowEdges(warehouses, stores));
+    setdiagramNodes([...transformedWarehouses, ...transformedStores]);
+    setdiagramEdges(generatediagramEdges(warehouses, stores));
   }, [warehouses, stores]);
 
 
@@ -170,7 +170,7 @@ function Pool() {
 
   const handleConfirmSavePool = () => {
     // Placeholder for actual save logic (e.g., API call)
-    console.log('Saving pool changes:', { flowNodes, flowEdges });
+    console.log('Saving pool changes:', { diagramNodes, diagramEdges });
     setIsConfirmSaveDialogOpen(false);
     setIsPoolEditable(false); // Disable editing mode after saving
     // Potentially refetch or update data here
@@ -182,19 +182,20 @@ function Pool() {
 
 
   return (
-    <div className="bg-neutral-900 text-white p-4 font-sans rounded-2xl">
+    <div className="text-foreground font-sans rounded-2xl bg-background">
       <div className="flex gap-8 w-full item-start">
         <Tabs defaultValue="warehouse" className="w-1/2">
-          <TabsList className="grid w-full grid-cols-2 bg-neutral-800 border-neutral-700 p-1">
+          <TabsList className="grid w-full grid-cols-2 p-1">
+            {/* Removed hardcoded bg and border colors, relying on default TabsList styling */}
             <TabsTrigger
               value="warehouse"
-              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-white text-neutral-400"
+              // Removed hardcoded active/inactive text and bg colors, relying on default TabsTrigger styling
             >
               Warehouse
             </TabsTrigger>
             <TabsTrigger
               value="store"
-              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-white text-neutral-400"
+              // Removed hardcoded active/inactive text and bg colors, relying on default TabsTrigger styling
             >
               Store
             </TabsTrigger>
@@ -202,7 +203,7 @@ function Pool() {
 
           <TabsContent
             value="warehouse"
-            className="mt-0 p-5 border border-t-0 border-neutral-600 rounded-b-md bg-neutral-700"
+            className="mt-0 p-5 border border-t-0 rounded-b-md bg-card" // Use bg-card and theme border
           >
             <WarehouseTabContent
               warehouses={warehouses}
@@ -213,7 +214,7 @@ function Pool() {
 
           <TabsContent
             value="store"
-            className="mt-0 p-5 border border-t-0 border-neutral-600 rounded-b-md bg-neutral-700"
+            className="mt-0 p-5 border border-t-0 rounded-b-md bg-card" // Use bg-card and theme border
           >
             <StoreTabContent
               stores={stores}
@@ -223,8 +224,8 @@ function Pool() {
           </TabsContent>
         </Tabs>
 
-        <div className="" style={{ height: '600px', width: '100%', border: '1px solid #4B5563', borderRadius: '0.375rem' }}>
-          <PoolDiagram nodes={flowNodes} edges={flowEdges} isEditable={isPoolEditable} />
+        <div className="border rounded-md" style={{ height: '600px', width: '100%' }}> {/* Use theme border */}
+          <PoolDiagram nodes={diagramNodes} edges={diagramEdges} isEditable={isPoolEditable} />
         </div>
       </div>
 
@@ -233,14 +234,14 @@ function Pool() {
           onClick={handleModifyPoolClick}
           disabled={isPoolEditable}
           variant="outline"
-          className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
+          // Removed hardcoded border, text, and hover colors
         >
-          Modify Diagram
+          Modify Connections
         </Button>
         <Button
           onClick={handleSaveChangesPoolClick}
           disabled={!isPoolEditable}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          // Using default Button variant styling (primary)
         >
           Save Changes
         </Button>
@@ -264,10 +265,10 @@ function Pool() {
 
       {/* Confirmation Dialog for Saving Pool Changes */}
       <Dialog open={isConfirmSaveDialogOpen} onOpenChange={setIsConfirmSaveDialogOpen}>
-        <DialogContent className="sm:max-w-md bg-neutral-800 border-neutral-700 text-white">
+        <DialogContent className="sm:max-w-md"> {/* Rely on default DialogContent styling */}
           <DialogHeader>
-            <DialogTitle className="text-white">Confirm Save Changes</DialogTitle>
-            <DialogDescription className="text-neutral-400 pt-2">
+            <DialogTitle>Confirm Save Changes</DialogTitle> {/* Rely on default DialogTitle styling */}
+            <DialogDescription className="pt-2"> {/* Rely on default DialogDescription styling */}
               Are you sure you want to save the changes made to the pool diagram?
             </DialogDescription>
           </DialogHeader>
@@ -276,14 +277,14 @@ function Pool() {
               type="button"
               variant="outline"
               onClick={handleCancelSavePool}
-              className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
+              // Removed hardcoded border, text, and hover colors
             >
               Cancel
             </Button>
             <Button
               type="button"
               onClick={handleConfirmSavePool}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              // Using default Button variant styling (primary) for confirm
             >
               Confirm Save
             </Button>

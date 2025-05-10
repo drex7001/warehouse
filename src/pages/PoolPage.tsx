@@ -194,7 +194,7 @@ const PoolPage = () => {
       )}
 
       {pools.map((poolItem) => (
-        <div key={poolItem.id} className="mb-8 p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow">
+        <div key={poolItem.id} className="mb-8 p-8 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-xl font-semibold dark:text-neutral-100 mb-1">{poolItem.name}</h2>
@@ -223,7 +223,7 @@ const PoolPage = () => {
           </div>
           <div className="mt-4 bg-neutral-100 dark:bg-neutral-900 rounded-md">
             <main>
-              <div className="mx-auto py-6 sm:px-6 lg:px-8 rounded border-1 border-neutral-300 dark:border-neutral-700">
+              <div className="mx-auto rounded ">
                 <div className="flex px-4 sm:px-0 gap-4">
                   <div className="w-full">
                     <Pool />

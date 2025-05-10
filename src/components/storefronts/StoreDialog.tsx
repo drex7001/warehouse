@@ -61,7 +61,7 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
 
   const renderPlatformSelection = () => (
     <div className="py-4">
-      <DialogDescription className="text-center mb-6 text-neutral-400">
+      <DialogDescription className="text-center mb-6 text-muted-foreground">
         Select the type of store you want to add.
       </DialogDescription>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -72,12 +72,15 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
         ].map((platform) => (
           <Button
             key={platform.type}
-            variant="outline"
-            className="flex flex-col items-center justify-center h-32 p-4 border-neutral-600 hover:bg-neutral-700 text-white bg-neutral-750" // Adjusted styling
+            variant="outline" // Outline variant is theme-aware
+            className="flex flex-col items-center justify-center h-32 p-4 hover:bg-accent hover:text-accent-foreground" // Rely on variant for most styling
             onClick={() => handleTypeSelect(platform.type)}
           >
-            <span className="text-xs text-neutral-400 mb-2">logo here</span> {/* Placeholder for actual logo */}
-            <span className="text-sm font-semibold">{platform.label}</span>
+            {/* Replace with actual <img> or SVG component for logos */}
+            <div className="w-12 h-12 mb-2 flex items-center justify-center bg-muted rounded-md">
+              <span className="text-xs text-muted-foreground">Logo</span>
+            </div>
+            <span className="text-sm font-semibold text-foreground">{platform.label}</span>
           </Button>
         ))}
       </div>
@@ -111,9 +114,12 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
         }
         onOpenChange(isOpen);
     }}>
-      <DialogContent className="sm:max-w-md md:max-w-lg bg-neutral-800 border-neutral-700 text-white">
+      {/* DialogContent will use default Shadcn styling (bg-background/bg-card, p-6, border, shadow) */}
+      {/* Adjust max-w if needed, e.g., sm:max-w-xl or sm:max-w-2xl for wider forms */}
+      <DialogContent className="sm:max-w-lg md:max-w-xl"> {/* Adjusted max-width for potentially wider forms */}
         <DialogHeader>
-          <DialogTitle className="text-white">
+          {/* DialogTitle will use default theme styling */}
+          <DialogTitle>
             {mode === 'edit' ? `Edit ${selectedType ? selectedType.charAt(0).toUpperCase() + selectedType.slice(1) : ''} Store` : 'Add New Store'}
           </DialogTitle>
         </DialogHeader>

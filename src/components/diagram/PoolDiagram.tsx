@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ReactFlow,
   Controls,
@@ -39,6 +39,10 @@ const defaultEdgeOptions = {
 export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromProps, isEditable }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesFromProps || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesFromProps || []);
+  const [flowColorMode, setFlowColorMode] = useState(() => {
+    const storedTheme = localStorage.getItem("theme");
+    return storedTheme === "dark" ? "dark" : "light";
+  });
 
   useEffect(() => {
     setNodes(nodesFromProps || []);
@@ -48,6 +52,24 @@ export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromPro
     setEdges(edgesFromProps || []);
   }, [edgesFromProps, setEdges]);
 
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === "theme") {
+        setFlowColorMode(event.newValue === "dark" ? "dark" : "light");
+      }
+    };
+
+    // Set initial theme based on localStorage
+    const currentTheme = localStorage.getItem("theme");
+    setFlowColorMode(currentTheme === "dark" ? "dark" : "light");
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -55,7 +77,7 @@ export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromPro
 
   return (
     <ReactFlow
-      colorMode="dark"
+      colorMode={flowColorMode}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
@@ -71,9 +93,9 @@ export default function PoolDiagram({ nodes: nodesFromProps, edges: edgesFromPro
       nodesDraggable={isEditable}
       nodesConnectable={isEditable}
       elementsSelectable={isEditable} // Controls if nodes and edges can be selected
-      panOnDrag={!isEditable} // Example: disable panning when editable, or keep it enabled
-      zoomOnScroll={!isEditable} // Example: disable zoom when editable
-      zoomOnDoubleClick={!isEditable} // Example: disable zoom on double click when editable
+      panOnDrag={isEditable} // Example: disable panning when editable, or keep it enabled
+      zoomOnScroll={isEditable} // Example: disable zoom when editable
+      zoomOnDoubleClick={isEditable} // Example: disable zoom on double click when editable
       // Consider if controls should be hidden or disabled when not editable
     >
        <Controls style={{ display: isEditable ? 'flex' : 'none' }} /> {/* Optionally hide controls */}
