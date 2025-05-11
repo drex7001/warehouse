@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pool from "../components/Pool";
 import { Button } from '../components/ui/button';
 import {
@@ -34,13 +34,32 @@ const PoolPage = () => {
   const [editPoolName, setEditPoolName] = useState('');
   const [editPoolDescription, setEditPoolDescription] = useState('');
 
+  // State to trigger scroll to a newly added pool
+  const [scrollToPoolId, setScrollToPoolId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (scrollToPoolId) {
+      requestAnimationFrame(() => {
+        const element = document.getElementById(`pool-item-${scrollToPoolId}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setScrollToPoolId(null); // Reset after scrolling is initiated
+        } else {
+          // Element not found, reset to avoid issues if pools update again without the element
+          setScrollToPoolId(null);
+        }
+      });
+    }
+  }, [scrollToPoolId]); // Depend only on scrollToPoolId
+
   const handleAddNewPool = () => {
     if (!newPoolName.trim()) {
       alert('Pool name cannot be empty.');
       return;
     }
+    const newPoolId = `pool-${Date.now()}`;
     const newPool: PoolData = {
-      id: `pool-${Date.now()}`,
+      id: newPoolId,
       name: newPoolName.trim(),
       description: newPoolDescription.trim(),
     };
@@ -48,6 +67,7 @@ const PoolPage = () => {
     setNewPoolName('');
     setNewPoolDescription('');
     setIsAddPoolModalOpen(false);
+    setScrollToPoolId(newPoolId); // Set ID to scroll to
   };
 
   const handleDeletePool = (poolId: string) => {
@@ -194,7 +214,7 @@ const PoolPage = () => {
       )}
 
       {pools.map((poolItem) => (
-        <div key={poolItem.id} className="mb-8 p-8 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow">
+        <div key={poolItem.id} id={`pool-item-${poolItem.id}`} className="mb-8 p-8 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-xl font-semibold dark:text-neutral-100 mb-1">{poolItem.name}</h2>
