@@ -60,7 +60,7 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
   };
 
   const renderPlatformSelection = () => (
-    <div className="py-4">
+    <div className="py-4 ">
       <DialogDescription className="text-center mb-6 text-muted-foreground">
         Select the type of store you want to add.
       </DialogDescription>
@@ -116,7 +116,7 @@ export function StoreDialog({ open, onOpenChange, onSubmit, mode, initialData })
     }}>
       {/* DialogContent will use default Shadcn styling (bg-background/bg-card, p-6, border, shadow) */}
       {/* Adjust max-w if needed, e.g., sm:max-w-xl or sm:max-w-2xl for wider forms */}
-      <DialogContent className="sm:max-w-lg md:max-w-xl"> {/* Adjusted max-width for potentially wider forms */}
+      <DialogContent className="sm:max-w-lg md:max-w-xl "> {/* Adjusted max-width for potentially wider forms */}
         <DialogHeader>
           {/* DialogTitle will use default theme styling */}
           <DialogTitle>

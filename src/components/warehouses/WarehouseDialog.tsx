@@ -47,13 +47,16 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] bg-neutral-800 border-neutral-700 text-white">
+      {/* DialogContent will use default Shadcn styling (bg-background/bg-card, p-6, border, shadow) */}
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-white">
+          {/* DialogTitle will use default theme styling */}
+          <DialogTitle>
             {mode === 'edit' ? 'Edit Warehouse' : 'Add New Warehouse'}
           </DialogTitle>
           {mode === 'add' && (
-            <DialogDescription className="text-neutral-400">
+            // DialogDescription will use default theme styling (text-muted-foreground)
+            <DialogDescription>
               Enter the details for the new warehouse.
             </DialogDescription>
           )}
@@ -61,40 +64,40 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right text-neutral-300">
+              {/* Label will use default theme styling (text-foreground) */}
+              <Label htmlFor="name" className="text-right">
                 Name <span className="text-red-500">*</span>
               </Label>
+              {/* Input will use default theme styling */}
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="col-span-3 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500 focus:border-blue-500"
+                className="col-span-3 placeholder:text-muted-foreground"
                 placeholder="e.g., Main Warehouse"
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="details" className="text-right text-neutral-300">
+              <Label htmlFor="details" className="text-right">
                 Details
               </Label>
               <Input
                 id="details"
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className="col-span-3 bg-neutral-700 border-neutral-600 text-white placeholder-neutral-500 focus:border-blue-500"
+                className="col-span-3 placeholder:text-muted-foreground"
                 placeholder="(Optional)"
               />
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}
-              className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white"
-            >
+            {/* Button variant="outline" is theme-aware */}
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
+            {/* Default Button variant is theme-aware (primary) */}
+            <Button type="submit">
               {mode === 'edit' ? 'Save Changes' : 'Add Warehouse'}
             </Button>
           </DialogFooter>
