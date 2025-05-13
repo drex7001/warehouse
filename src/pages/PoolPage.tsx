@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PoolExplanationDialog from '../components/PoolExplanationDialog'; // Adjust path if necessary
 
 // Interface for Pool data
 interface PoolData {
@@ -99,10 +100,36 @@ const PoolPage = () => {
     setEditingPool(null);
   };
 
+    const questionMarkStyle: React.CSSProperties = {
+      marginLeft: '8px',
+      cursor: 'pointer',
+      color: 'blue',
+      fontWeight: 'bold',
+      display: 'inline-block',
+      border: '1px solid blue',
+      borderRadius: '50%',
+      width: '20px',
+      height: '20px',
+      textAlign: 'center',
+      lineHeight: '18px', // Adjust for vertical centering
+    };
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
+    const openDialog = () => setIsDialogOpen(true);
+    const closeDialog = () => setIsDialogOpen(false);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold dark:text-neutral-100">Pools Overview</h1>
+          <span
+          onClick={openDialog}
+          style={questionMarkStyle}
+          title="What is a Pool?"
+        >
+          ?
+        </span>
         <Dialog open={isAddPoolModalOpen} onOpenChange={setIsAddPoolModalOpen}>
           <DialogTrigger asChild>
             <Button
@@ -112,7 +139,7 @@ const PoolPage = () => {
               Add New Pool +
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[475px] bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white">
+          <DialogContent className="sm:max-w-[475px]  border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white">
             <DialogHeader>
               <DialogTitle className="text-neutral-900 dark:text-white">Create a New Pool</DialogTitle>
               <DialogDescription className="text-neutral-600 dark:text-neutral-400">
@@ -128,7 +155,7 @@ const PoolPage = () => {
                   id="poolName"
                   value={newPoolName}
                   onChange={(e) => setNewPoolName(e.target.value)}
-                  className="col-span-3 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400"
+                  className="col-span-3"
                   placeholder="e.g., Staging Environment"
                   required
                 />
@@ -141,7 +168,7 @@ const PoolPage = () => {
                   id="poolDescription"
                   value={newPoolDescription}
                   onChange={(e) => setNewPoolDescription(e.target.value)}
-                  className="col-span-3 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400"
+                  className="col-span-3"
                   placeholder="(Optional) e.g., For testing new integrations"
                 />
               </div>
@@ -181,7 +208,7 @@ const PoolPage = () => {
                   id="editPoolName"
                   value={editPoolName}
                   onChange={(e) => setEditPoolName(e.target.value)}
-                  className="col-span-3 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400"
+                  className="col-span-3"
                   required
                 />
               </div>
@@ -193,7 +220,7 @@ const PoolPage = () => {
                   id="editPoolDescription"
                   value={editPoolDescription}
                   onChange={(e) => setEditPoolDescription(e.target.value)}
-                  className="col-span-3 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400"
+                  className="col-span-3"
                 />
               </div>
             </div>
@@ -259,6 +286,8 @@ const PoolPage = () => {
           No pools created yet. Click "Add New Pool" to get started.
         </p>
       )}
+      
+      <PoolExplanationDialog isOpen={isDialogOpen} onClose={closeDialog} />
     </div>
   );
 };
