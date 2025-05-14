@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // custom components
 import { WarehouseDialog } from './warehouses/WarehouseDialog';
-import { WarehouseTabContent } from './warehouses/WarehouseTabContent';
+import { WarehouseTab } from './warehouses/WarehouseTab';
 import { StoreDialog } from './storefronts/StoreDialog'; // Import StoreDialog
 import { StoreTabContent } from './storefronts/StoreTabContent';
 import PoolDiagram from './diagram/PoolDiagram';
@@ -19,16 +19,33 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'; // Ensure Dialog components are imported
 
-// Dummy data
-const initialWarehouses = [
-  { id: 'w1', name: 'Warehouse A', details: 'Serves New York, Boston', isDefault: true },
-  { id: 'w2', name: 'Warehouse B', details: 'Serves Chicago, Detroit', isDefault: false },
-];
-const initialStores = [
-  { id: 's1', name: 'My Shopify Store', type: 'shopify', apiKey: 'shpat_123', storeUrl: 'https://s1.myshopify.com' },
-  { id: 's2', name: 'My WooCommerce Site', type: 'woocommerce', consumerKey: 'ck_abc', consumerSecret: 'cs_def', siteUrl: 'https://mywoosite.com' },
-  { id: 's3', name: 'My Daraz Shop', type: 'daraz', sellerId: 'daraz_seller_789' },
-];
+// Assuming WarehouseData and StoreData types are imported from a shared location or ../pages/PoolPage
+// For example:
+// import { WarehouseData, StoreData } from '../pages/PoolPage'; // Adjust path as needed
+
+// If not importing, you might need minimal local type definitions for props:
+interface WarehouseData {
+  id: string;
+  name: string;
+  details?: string;
+  isDefault?: boolean;
+  pool_id?: string | null;
+  sellable: boolean;
+  // other fields used by transformWarehouseToNode & dialogs
+}
+
+interface StoreData {
+  id: string;
+  name: string;
+  type: string;
+  // other fields used by transformStoreToNode & dialogs
+}
+
+interface PoolProps {
+  initialWarehousesData: WarehouseData[];
+  initialStoresData: StoreData[];
+  poolId: string; // Added poolId prop
+}
 
 const WAREHOUSE_NODE_X = 100;
 const STORE_NODE_X = 500;
@@ -78,24 +95,32 @@ const generatediagramEdges = (appWarehouses, appStores) => {
   return edges;
 };
 
-function Pool() {
+function Pool({ initialWarehousesData, initialStoresData, poolId }: PoolProps) {
   // Warehouse State
-  const [warehouses, setWarehouses] = useState(initialWarehouses);
-  const [isWarehouseDialogOpen, setIsWarehouseDialogOpen] = useState(false);
-  const [warehouseDialogMode, setWarehouseDialogMode] = useState('add');
-  const [currentEditingWarehouse, setCurrentEditingWarehouse] = useState(null);
-
+  const [warehouses, setWarehouses] = useState<WarehouseData[]>(initialWarehousesData);
   // Store State
-  const [stores, setStores] = useState(initialStores);
+  const [stores, setStores] = useState<StoreData[]>(initialStoresData);
+
+  // Effects to update state if props change (optional if key prop handles remounting)
+  useEffect(() => {
+    setWarehouses(initialWarehousesData);
+  }, [initialWarehousesData]);
+
+  useEffect(() => {
+    setStores(initialStoresData);
+  }, [initialStoresData]);
+  
+  // ...existing state for dialogs, diagram, edit mode ...
+  const [isWarehouseDialogOpen, setIsWarehouseDialogOpen] = useState(false);
+  const [warehouseDialogMode, setWarehouseDialogMode] = useState<'add' | 'edit'>('add');
+  const [currentEditingWarehouse, setCurrentEditingWarehouse] = useState<WarehouseData | null>(null);
+
   const [isStoreDialogOpen, setIsStoreDialogOpen] = useState(false);
-  const [storeDialogMode, setStoreDialogMode] = useState('add');
-  const [currentEditingStore, setCurrentEditingStore] = useState(null);
+  const [storeDialogMode, setStoreDialogMode] = useState<'add' | 'edit'>('add');
+  const [currentEditingStore, setCurrentEditingStore] = useState<StoreData | null>(null);
 
-  // diagram State
-  const [diagramNodes, setdiagramNodes] = useState([]);
-  const [diagramEdges, setdiagramEdges] = useState([]);
-
-  // Edit mode for PoolDiagram
+  const [diagramNodes, setdiagramNodes] = useState<any[]>([]);
+  const [diagramEdges, setdiagramEdges] = useState<any[]>([]);
   const [isPoolEditable, setIsPoolEditable] = useState(false);
   const [isConfirmSaveDialogOpen, setIsConfirmSaveDialogOpen] = useState(false);
 
@@ -120,17 +145,25 @@ function Pool() {
     setIsWarehouseDialogOpen(true);
   };
 
-  const handleWarehouseDialogSubmit = (formData) => {
+  const handleWarehouseDialogSubmit = (formData: Omit<WarehouseData, 'id'> & { id?: string }) => {
     if (warehouseDialogMode === 'add') {
-      // Assuming isDefault might come from formData or defaults to false
-      // For now, new warehouses are not set as default unless formData includes `isDefault: true`
-      const newWarehouse = { ...formData, id: `w${Date.now()}`, isDefault: formData.isDefault || false };
-      setWarehouses([...warehouses, newWarehouse]);
+      const newWarehouse: WarehouseData = {
+        ...formData,
+        id: `w${Date.now()}-${poolId}`, // Ensure unique ID
+        isDefault: formData.isDefault || false,
+        pool_id: poolId, // Assign current pool's ID
+        // Ensure all required fields from WarehouseData are present
+        sellable: formData.sellable !== undefined ? formData.sellable : true, // Default to true if not provided
+      };
+      setWarehouses(prev => [...prev, newWarehouse]);
     } else if (warehouseDialogMode === 'edit' && formData.id) {
       setWarehouses(
-        warehouses.map((wh) => (wh.id === formData.id ? { ...wh, ...formData } : wh))
+        prevWarehouses => prevWarehouses.map((wh) =>
+          wh.id === formData.id ? { ...wh, ...formData, pool_id: poolId } : wh
+        )
       );
     }
+    // setIsWarehouseDialogOpen(false); // Dialog should handle its own closing
   };
 
   // Store Dialog Handlers
@@ -146,17 +179,20 @@ function Pool() {
     setIsStoreDialogOpen(true);
   };
 
-  const handleStoreDialogSubmit = (formData) => { // formData includes 'type' and all platform fields
+  const handleStoreDialogSubmit = (formData: Omit<StoreData, 'id'> & { id?: string }) => { // formData includes 'type' and all platform fields
     if (storeDialogMode === 'add') {
-      // formData already has 'type' and platform specific fields from the specific form
-      const newStore = { ...formData, id: `s${Date.now()}` };
-      setStores([...stores, newStore]);
+      const newStore: StoreData = {
+        ...formData,
+        id: `s${Date.now()}-${poolId}`, // Ensure unique ID
+        // Ensure all required fields from StoreData are present
+      };
+      setStores(prevStores => [...prevStores, newStore]);
     } else if (storeDialogMode === 'edit' && formData.id) {
       setStores(
-        stores.map((st) => (st.id === formData.id ? formData : st)) // Replace with new formData
+        prevStores => prevStores.map((st) => (st.id === formData.id ? { ...st, ...formData } : st))
       );
     }
-    // StoreDialog will call onOpenChange(false) internally now
+    // setIsStoreDialogOpen(false); // Dialog should handle its own closing
   };
 
   // Pool Diagram Edit Handlers
@@ -205,7 +241,7 @@ function Pool() {
             value="warehouse"
             className="mt-0 p-5 border border-t-0 rounded-b-md bg-card" // Use bg-card and theme border
           >
-            <WarehouseTabContent
+            <WarehouseTab
               warehouses={warehouses}
               onAdd={openAddWarehouseDialog}
               onEdit={openEditWarehouseDialog}

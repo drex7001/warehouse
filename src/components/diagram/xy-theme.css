@@ -17,8 +17,11 @@
    
     --xy-handle-background-color-default: #ffffff;
     --xy-handle-border-color-default: #aaaaaa;
-   
-    --xy-edge-label-color-default: #505050;
+    --xy-edge-stroke-color-default: #b1b1b7; /* Default edge stroke color */
+    --xy-edge-marker-color-default: #b1b1b7; /* Default edge marker color */
+    --xy-edge-stroke-width-default: 2px;
+    --xy-edge-stroke-width-hover: 2.5px;
+    --xy-edge-stroke-width-selected: 3px;
   }
    
   .react-flow.dark {
@@ -237,4 +240,27 @@
     margin-top: 10px;
     margin-bottom: 3px;
     display: inline-block;
+  }
+
+  .react-flow__edge-path {
+    stroke: var(--xy-edge-stroke-color-default, #b1b1b7);
+    stroke-width: var(--xy-edge-stroke-width-default, 2px);
+    fill: none;
+    /* Set the marker color variable for default state */
+    --edge-marker-color-actual: var(--xy-edge-marker-color-default, #b1b1b7);
+  }
+
+  /* Update hover and selected styles for edges */
+  .react-flow__edge.selectable:hover .react-flow__edge-path {
+    stroke: var(--xy-theme-edge-hover, black);
+    stroke-width: var(--xy-edge-stroke-width-hover, 2.5px);
+    /* Update marker color on hover */
+    --edge-marker-color-actual: var(--xy-theme-edge-hover, black);
+  }
+
+  .react-flow__edge.selectable.selected .react-flow__edge-path {
+    stroke: var(--xy-theme-selected, #f57dbd); /* Use theme's selection color for nodes */
+    stroke-width: var(--xy-edge-stroke-width-selected, 3px); /* Make selected edges thicker */
+    /* Update marker color for selected state */
+    --edge-marker-color-actual: var(--xy-theme-selected, #f57dbd);
   }

@@ -10,13 +10,12 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox'; // Import Checkbox
+import { Checkbox } from '@/components/ui/checkbox'; 
 
-export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialData }) {
+export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialData, creationMode }) {
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
   const [id, setId] = useState(null);
-  // New state variables
   const [street_addr, setStreetAddr] = useState('');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
@@ -25,17 +24,18 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
   const [telephone_1, setTelephone1] = useState('');
   const [telephone_2, setTelephone2] = useState('');
   const [suppliers_id, setSuppliersId] = useState('');
-  const [sellable, setSellable] = useState(false);
+  const [sellable, setSellable] = useState(false); // Will be determined by context
   const [fulfilable_cities, setFulfilableCities] = useState('');
-  const [pool_id, setPoolId] = useState('');
+  const [pool_id, setPoolId] = useState(''); // Will be determined by context
+
+  const isNonSellableCreation = creationMode === 'nonSellable';
 
   useEffect(() => {
     if (open) {
-      if (mode === 'edit' && initialData) {
+      if (mode === 'edit' && initialData) { // EDIT MODE
         setName(initialData.name || '');
         setDetails(initialData.details || '');
         setId(initialData.id || null);
-        // Initialize new fields for edit mode
         setStreetAddr(initialData.street_addr || '');
         setCity(initialData.city || '');
         setProvince(initialData.province || '');
@@ -44,14 +44,20 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
         setTelephone1(initialData.telephone_1 || '');
         setTelephone2(initialData.telephone_2 || '');
         setSuppliersId(initialData.suppliers_id || '');
-        setSellable(initialData.sellable || false);
         setFulfilableCities(initialData.fulfilable_cities || '');
-        setPoolId(initialData.pool_id || '');
-      } else {
+        
+        if (isNonSellableCreation) { // Editing a non-sellable warehouse
+          setSellable(false);
+          setPoolId(''); 
+        } else { // Editing a sellable warehouse
+          setSellable(true); // Sellable warehouses are always sellable
+          setPoolId(initialData.pool_id || ''); // Retain existing pool_id
+        }
+      } else { // ADD MODE
+        // Reset all fields for add mode
         setName('');
         setDetails('');
         setId(null);
-        // Reset new fields for add mode
         setStreetAddr('');
         setCity('');
         setProvince('');
@@ -60,25 +66,30 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
         setTelephone1('');
         setTelephone2('');
         setSuppliersId('');
-        setSellable(false);
         setFulfilableCities('');
-        setPoolId('');
+        // Set sellable and pool_id based on creation context
+        if (isNonSellableCreation) { // Adding a new non-sellable warehouse
+          setSellable(false);
+          setPoolId('');
+        } else { // Adding a new sellable warehouse (e.g., from within a Pool's context)
+          setSellable(true);
+          // pool_id for new sellable warehouses should be passed via initialData by the caller if known
+          setPoolId(initialData?.pool_id || ''); 
+        }
       }
     }
-  }, [open, mode, initialData]);
+  }, [open, mode, initialData, isNonSellableCreation]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      // You might want to use shadcn/ui's toast for notifications
       alert('Warehouse name cannot be empty.');
       return;
     }
-    onSubmit({
+    const submittedData = {
       id: id,
       name: name.trim(),
       details: details.trim(),
-      // Include new fields in submission
       street_addr: street_addr.trim(),
       city: city.trim(),
       province: province.trim(),
@@ -87,24 +98,24 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
       telephone_1: telephone_1.trim(),
       telephone_2: telephone_2.trim(),
       suppliers_id: suppliers_id.trim(),
-      sellable: sellable,
       fulfilable_cities: fulfilable_cities.trim(),
-      pool_id: pool_id.trim(),
-    });
-    onOpenChange(false); // Close dialog
+      sellable: sellable, // Use the state variable, which is now correctly set
+      pool_id: pool_id ? pool_id.trim() : null, // Use the state variable
+    };
+    onSubmit(submittedData);
+    onOpenChange(false); 
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* DialogContent will use default Shadcn styling (bg-background/bg-card, p-6, border, shadow) */}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          {/* DialogTitle will use default theme styling */}
           <DialogTitle>
-            {mode === 'edit' ? 'Edit Warehouse' : 'Add New Warehouse'}
+            {mode === 'edit' 
+              ? (isNonSellableCreation ? 'Edit Non-sellable Warehouse' : 'Edit Warehouse')
+              : (isNonSellableCreation ? 'Create Non-sellable Warehouse' : 'Add New Warehouse')}
           </DialogTitle>
           {mode === 'add' && (
-            // DialogDescription will use default theme styling (text-muted-foreground)
             <DialogDescription>
               Enter the details for the new warehouse.
             </DialogDescription>
@@ -113,11 +124,9 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              {/* Label will use default theme styling (text-foreground) */}
               <Label htmlFor="name" className="">
                 Name <span className="text-red-500">*</span>
               </Label>
-              {/* Input will use default theme styling */}
               <Input
                 id="name"
                 value={name}
@@ -139,7 +148,6 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
                 placeholder="(Optional) General details"
               />
             </div>
-            {/* New Input Fields */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="street_addr" className="">
                 Street Address
@@ -248,42 +256,16 @@ export function WarehouseDialog({ open, onOpenChange, onSubmit, mode, initialDat
                 placeholder="e.g., New York, Boston (comma-separated)"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="pool_id" className="">
-                Pool ID
-              </Label>
-              <Input
-                id="pool_id"
-                value={pool_id}
-                onChange={(e) => setPoolId(e.target.value)}
-                className="col-span-3 placeholder:text-muted-foreground"
-                placeholder="e.g., P001"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="sellable" className="">
-                Sellable
-              </Label>
-              <div className="col-span-3 flex items-center">
-                <Checkbox
-                  id="sellable"
-                  checked={sellable}
-                  onCheckedChange={setSellable}
-                />
-                 <label htmlFor="sellable" className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    Is this warehouse sellable?
-                </label>
-              </div>
-            </div>
+
+            {/* The Pool ID and Sellable checkbox are now removed from the UI */}
+            {/* Their values are determined by the context (creationMode and initialData) */}
           </div>
           <DialogFooter className="sm:justify-end">
-            {/* Button variant="outline" is theme-aware */}
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            {/* Default Button variant is theme-aware (primary) */}
             <Button type="submit">
-              {mode === 'edit' ? 'Save Changes' : 'Add Warehouse'}
+              {mode === 'edit' ? 'Save Changes' : (isNonSellableCreation ? 'Create Warehouse' : 'Add Warehouse')}
             </Button>
           </DialogFooter>
         </form>

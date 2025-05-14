@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
+export function WarehouseTab({ warehouses, onAdd, onEdit }) {
   return (
     <div>
       <div className="flex justify-end mb-4">
@@ -49,4 +49,4 @@ export function WarehouseTabContent({ warehouses, onAdd, onEdit }) {
   );
 }
 
-export default WarehouseTabContent;
+export default WarehouseTab;
